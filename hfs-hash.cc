@@ -224,9 +224,9 @@ class Database
     void insert(const Item& item)
     {
       sql::command cmd(_db, "insert into digest values(?, ?, ?)");
-      cmd.bind(1, item.path().string().c_str());
-      cmd.bind(2, item.hash().c_str());
-      cmd.bind(3, ::to_string(item.date()).c_str());
+      cmd.bind(1, item.path().string().c_str(), sqlite3pp::nocopy);
+      cmd.bind(2, item.hash().c_str(), sqlite3pp::nocopy);
+      cmd.bind(3, ::to_string(item.date()).c_str(), sqlite3pp::nocopy);
       cmd.execute();
       result(item);
     }
@@ -234,9 +234,9 @@ class Database
     void update(const Item& item)
     {
       sql::command cmd(_db, "insert or replace into digest values(?, ?, ?)");
-      cmd.bind(1, item.path().string().c_str());
-      cmd.bind(2, item.hash().c_str());
-      cmd.bind(3, ::to_string(item.date()).c_str());
+      cmd.bind(1, item.path().string().c_str(), sqlite3pp::nocopy);
+      cmd.bind(2, item.hash().c_str(), sqlite3pp::nocopy);
+      cmd.bind(3, ::to_string(item.date()).c_str(), sqlite3pp::nocopy);
       cmd.execute();
       result(item);
     }
@@ -244,7 +244,7 @@ class Database
     void remove(const fs::path& path)
     {
       sql::query q(_db, "select filename, date, hash from digest where filename = ?");
-      q.bind(1, path.string().c_str());
+      q.bind(1, path.string().c_str(), sqlite3pp::nocopy);
       for(auto i: q)
       {
 	const char* path;
@@ -257,7 +257,7 @@ class Database
 	result(item);
       }
       sql::command cmd(_db, "delete from digest where filename = ?");
-      cmd.bind(1, path.string().c_str());
+      cmd.bind(1, path.string().c_str(), sqlite3pp::nocopy);
       cmd.execute();
     }
 
@@ -265,9 +265,9 @@ class Database
     {
       sql::command cmd(_db,
 	"insert or ignore into bad values(?, ?, ?)");
-      cmd.bind(1, item.path().string().c_str());
-      cmd.bind(2, item.hash().c_str());
-      cmd.bind(3, ::to_string(item.date()).c_str());
+      cmd.bind(1, item.path().string().c_str(), sqlite3pp::nocopy);
+      cmd.bind(2, item.hash().c_str(), sqlite3pp::nocopy);
+      cmd.bind(3, ::to_string(item.date()).c_str(), sqlite3pp::nocopy);
       cmd.execute();
       result(item);
     }
@@ -314,10 +314,10 @@ class Database
       if(!_record)
 	return;
       sql::command cmd(_db, "insert into result values(?, ?, ?, ?)");
-      cmd.bind(1, item.path().string().c_str());
-      cmd.bind(2, Item::to_string(item.result()).c_str());
-      cmd.bind(3, item.hash().c_str());
-      cmd.bind(4, ::to_string(item.date()).c_str());
+      cmd.bind(1, item.path().string().c_str(), sqlite3pp::nocopy);
+      cmd.bind(2, Item::to_string(item.result()).c_str(), sqlite3pp::nocopy);
+      cmd.bind(3, item.hash().c_str(), sqlite3pp::nocopy);
+      cmd.bind(4, ::to_string(item.date()).c_str(), sqlite3pp::nocopy);
       cmd.execute();
     }      
 };
