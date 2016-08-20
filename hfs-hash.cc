@@ -532,7 +532,7 @@ int main(int argc, const char** argv)
   fs::path home{*get_env("HOME")};
   std::string config_file;
   fs::path default_config_file{home};
-  default_config_file /= ".hsf-hash.rc";
+  default_config_file /= ".hfs-hash.rc";
   // Command line only options.
   cmdline.add_options()
     ("bad,b", "list files which has a hash which differs from the one recorded")
